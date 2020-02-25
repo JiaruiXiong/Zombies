@@ -69,6 +69,7 @@ JX.prototype.selectAction = function () {
             action.direction.y -= difY * acceleration / (dist * dist);
         }
     }
+    console.log(target);
     // rock rock collision
     for (var i = 0; i < this.game.rocks.length; i++) {
         var ent = this.game.rocks[i];
