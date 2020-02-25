@@ -7,18 +7,18 @@
 function JX(game) {
     this.player = 1;            // Number of player 
     this.radius = 10;           // the radius of the players
-    this.rocks = 0;             // the number of initial rocks 不能改
+    this.rocks = 0;             // the number of initial rocks dont change it 
     this.kills = 0;             // initialize the kills     
     this.name = "Jiarui Xiong"; // chosen Name
-    this.color = "Blue";       // the color of the players // 需要在agent controller 中改名字
-    this.cooldown = 0;          // 不能改
+    this.color = "Blue";       // the color of the players // 需要在agent controller 中改名字 Using a name in agent controller
+    this.cooldown = 0;          // cooldown time
 
-    this.corners = [{x:0,y:0},{x:800,y:0},{x:0,y:800},{x:800,y:800}]; //测试用的加的
+    this.corners = [{x:0,y:0},{x:800,y:0},{x:0,y:800},{x:800,y:800}]; //测试用的加的  Using for testing 
 
-    // 判定是否是角落。player可以往回走
+    // 判定是否是角落。player可以往回走 // checking if corner or not, the player will not stuck on corners
     Entity.call(this, game, this.radius + Math.random() * (800 - this.radius * 2), this.radius + Math.random() * (800 - this.radius * 2));
 
-    this.velocity = { x: 0, y: 0 }; // the velocity of x-axis and y-axis 不能改
+    this.velocity = { x: 0, y: 0 }; // the velocity of x-axis and y-axis   Please dont change it 
 };
 
 JX.prototype = new Entity();
@@ -47,7 +47,7 @@ JX.prototype.selectAction = function () {
     var closest = 1000;
     var target = null;
     this.visualRadius = 500;
-    // 僵尸
+    // 僵尸 Zombies
     for (var i = 0; i < this.game.zombies.length; i++) {
         var ent = this.game.zombies[i];
         var dist = distance(ent, this);
@@ -62,7 +62,7 @@ JX.prototype.selectAction = function () {
             action.direction.y -= difY * acceleration / (dist * dist);
         }
     }
-    // 石头
+    // rock rock collision
     for (var i = 0; i < this.game.rocks.length; i++) {
         var ent = this.game.rocks[i];
         if (!ent.removeFromWorld && !ent.thrown && this.rocks < 2 && this.collide({ x: ent.x, y: ent.y, radius: this.visualRadius })) {
@@ -75,7 +75,7 @@ JX.prototype.selectAction = function () {
             }
         }
     }
-    // 测试
+    // testing corner when collision
     for (var i = 0; i < this.corners.length;i++) {
         if (this.collide({x:this.corners[i].x,y:this.corners[i].y, radius: this.visualRadius})) {
             var dist = distance(this, this.corners[i]);
@@ -86,7 +86,7 @@ JX.prototype.selectAction = function () {
 
         }
     }
-    // 测试
+    // testing
     if (target && !target.removeFromWorld && 0 === this.cooldown && this.rocks > 0) {
         var zx = target.x;
         var zvx = target.velocity.x;
