@@ -6,11 +6,12 @@
 
 
 function JXAN(game) {
+    this.count = 0
     this.player = 1;
     this.radius = 10;
     this.rocks = 0;
     this.kills = 0;
-    this.name = "Dr. Marriott";
+    this.name = "Jiarui Xiong && Ai Nguyen";
     this.color = "White";
     this.cooldown = 0;
     this.direction = { x: randomInt(1600) - 800, y: randomInt(1600) - 800 };
@@ -36,26 +37,77 @@ JXAN.prototype.constructor = JXAN;
 // you may access a list of players from this.game.players
 
 JXAN.prototype.selectAction = function () {
-
-    var action = { direction: { x: this.direction.x, y: this.direction.y }, throwRock: false, target: null };
-    var closest = 10;
-    var target = null;
+    debugger;
+    var acceleration = 1000000;
+    var actionZombie = { direction: { x: this.direction.x, y: this.direction.y }, throwRock: false, target: null };
+    var actionRock = { direction: { x: this.direction.x, y: this.direction.y }, throwRock: false, target: null };
+    var closestZombie = Infinity;
+    var closestRock = Infinity;
+    var target1 = null;
 
     for (var i = 0; i < this.game.zombies.length; i++) {
         var ent = this.game.zombies[i];
         var dist = distance(ent, this);
-        if (dist < closest) {
-            closest = dist;
-            target = ent;
+        closestZombie = Math.min(dist, closestZombie);
+        if (dist <= closestZombie) {
+            if (this.game.players[0].rocks !== 0 && dist <= 35){
+                debugger
+                closestZombie = dist;
+                target1 = ent;
+            } else {
+                var difX = (ent.x - this.x) / dist;
+                var difY = (ent.y - this.y) / dist;
+                actionZombie.direction.x -= difX * acceleration / (dist * dist);
+                actionZombie.direction.y -= difY * acceleration / (dist * dist);
+            }
         }
     }
 
-    if (target) {
-        action.target = target;
-        action.throwRock = true;
+
+    for (var i = 0; i < this.game.rocks.length; i++) {
+        var ent = this.game.rocks[i];
+        var dist = distance(ent, this);
+        closestRock = Math.min(dist, closestRock);
+        if (dist <= closestRock) {
+            if (dist > this.radius + ent.radius) {
+                var difX = (ent.x - this.x) / dist;
+                var difY = (ent.y - this.y) / dist;
+                actionRock.direction.x += difX * acceleration / (dist * dist);
+                actionRock.direction.y += difY * acceleration / (dist * dist);
+            }
+        }
+
     }
-    return action;
+    this.count++;
+    if(this.y > 780 || this.x > 780){
+        console.log(this.count);
+    }
+    if (target1) {
+        actionRock.target = target1;
+        actionRock.throwRock = true;
+        actionZombie.target = target1;
+        actionZombie.throwRock = true;
+    }
+    debugger;
+    if (closestRock <= closestZombie){
+        if (this.rocks === (2 || 1)){
+            return actionZombie
+        } else {
+            return actionRock
+        }
+    } else if(closestRock > closestZombie){
+        return actionZombie
+    }
+
 };
+
+
+
+
+
+
+
+
 
 // do not change code beyond this point
 
@@ -165,6 +217,7 @@ JXAN.prototype.update = function () {
 
     this.velocity.x -= (1 - friction) * this.game.clockTick * this.velocity.x;
     this.velocity.y -= (1 - friction) * this.game.clockTick * this.velocity.y;
+    console.log("x: " + this.x + " ,y: " + this.y);
 };
 
 JXAN.prototype.draw = function (ctx) {
