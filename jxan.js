@@ -4,7 +4,7 @@
 
 // only change code in selectAction function()
 
-function JX(game) {
+function JXAN(game) {
     this.player = 1;            // Number of player 
     this.radius = 10;           // the radius of the players
     this.rocks = 0;             // the number of initial rocks dont change it 
@@ -21,8 +21,8 @@ function JX(game) {
     this.velocity = { x: 0, y: 0 }; // the velocity of x-axis and y-axis   Please dont change it 
 };
 
-JX.prototype = new Entity();
-JX.prototype.constructor = JX;
+JXAN.prototype = new Entity();
+JXAN.prototype.constructor = JXAN;
 
 // alter the code in this function to create your agent
 // you may check the state but do not change the state of these variables:
@@ -40,7 +40,7 @@ JX.prototype.constructor = JX;
 // you may access a list of rocks from this.game.rocks
 // you may access a list of players from this.game.players
 
-JX.prototype.selectAction = function () {
+JXAN.prototype.selectAction = function () {
 
     var action = { direction: { x: 0, y: 0 }, throwRock: false, target: null};
     var acceleration = 1000000;
@@ -138,27 +138,27 @@ JX.prototype.selectAction = function () {
 
 // do not change code beyond this point
 
-JX.prototype.collide = function (other) {
+JXAN.prototype.collide = function (other) {
     return distance(this, other) < this.radius + other.radius;
 };
 
-JX.prototype.collideLeft = function () {
+JXAN.prototype.collideLeft = function () {
     return (this.x - this.radius) < 0;
 };
 
-JX.prototype.collideRight = function () {
+JXAN.prototype.collideRight = function () {
     return (this.x + this.radius) > 800;
 };
 
-JX.prototype.collideTop = function () {
+JXAN.prototype.collideTop = function () {
     return (this.y - this.radius) < 0;
 };
 
-JX.prototype.collideBottom = function () {
+JXAN.prototype.collideBottom = function () {
     return (this.y + this.radius) > 800;
 };
 
-JX.prototype.update = function () {
+JXAN.prototype.update = function () {
     Entity.prototype.update.call(this);
     // console.log(this.velocity);
     if (this.cooldown > 0) this.cooldown -= this.game.clockTick;
@@ -246,7 +246,7 @@ JX.prototype.update = function () {
     this.velocity.y -= (1 - friction) * this.game.clockTick * this.velocity.y;
 };
 
-JX.prototype.draw = function (ctx) {
+JXAN.prototype.draw = function (ctx) {
     ctx.beginPath();
     ctx.fillStyle = this.color;
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
