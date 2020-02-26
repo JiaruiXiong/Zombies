@@ -1,35 +1,26 @@
 
-// find and replace CPM with your initials (i.e. ABC)
+// find and replace JXAN with your initials (i.e. ABC)
 // change this.name = "Your Chosen Name"
 
 // only change code in selectAction function()
 
-function JX(game) {
-    this.player = 1;            // Number of player 
-    this.radius = 10;           // the radius of the players
-    this.rocks = 0;             // the number of initial rocks dont change it 
-    this.kills = 0;             // initialize the kills  
-    
-    
 
-    this.name = "Jiarui Xiong"; // chosen Name    !!!  Ai, Please add your name at herezzss    
-
-
-
-
-    this.color = "Blue";       // the color of the players // 需要在agent controller 中改名字 Using a name in agent controller
-    this.cooldown = 0;          // cooldown time
-
-    this.corners = [{x:0,y:0},{x:800,y:0},{x:0,y:800},{x:800,y:800}]; //测试用的加的  Using for testing 
-
-    // 判定是否是角落。player可以往回走 // checking if corner or not, the player will not stuck on corners
+function JXAN(game) {
+    this.player = 1;
+    this.radius = 10;
+    this.rocks = 0;
+    this.kills = 0;
+    this.name = "Dr. Marriott";
+    this.color = "White";
+    this.cooldown = 0;
+    this.direction = { x: randomInt(1600) - 800, y: randomInt(1600) - 800 };
     Entity.call(this, game, this.radius + Math.random() * (800 - this.radius * 2), this.radius + Math.random() * (800 - this.radius * 2));
 
-    this.velocity = { x: 0, y: 0 }; // the velocity of x-axis and y-axis   Please dont change it 
+    this.velocity = { x: 0, y: 0 };
 };
 
-JX.prototype = new Entity();
-JX.prototype.constructor = JX;
+JXAN.prototype = new Entity();
+JXAN.prototype.constructor = JXAN;
 
 // alter the code in this function to create your agent
 // you may check the state but do not change the state of these variables:
@@ -40,21 +31,18 @@ JX.prototype.constructor = JX;
 //    this.velocity
 //    this.game and any of its properties
 
-// Algorithm: Zombies from TCSS 343 last assginment
-// Using Greedy Algorithm.
-
 // you may access a list of zombies from this.game.zombies
 // you may access a list of rocks from this.game.rocks
 // you may access a list of players from this.game.players
 
-JX.prototype.selectAction = function () {
+JXAN.prototype.selectAction = function () {
 
-    var action = { direction: { x: 0, y: 0 }, throwRock: false, target: null};
-    var acceleration = 1000000;
-    var closest = 1000;
+    var action = { direction: { x: this.direction.x, y: this.direction.y }, throwRock: false, target: null };
+    var closest = 10;
     var target = null;
-    this.visualRadius = 500;
-    // 僵尸 Zombies
+
+
+    // Dodge zombies aaaaaaaaaaaaaaa................................ 
     for (var i = 0; i < this.game.zombies.length; i++) {
         var ent = this.game.zombies[i];
         var dist = distance(ent, this);
@@ -62,109 +50,38 @@ JX.prototype.selectAction = function () {
             closest = dist;
             target = ent;
         }
-        if (this.collide({x: ent.x, y: ent.y, radius: this.visualRadius})) {
-            var difX = (ent.x - this.x) / dist;
-            var difY = (ent.y - this.y) / dist;
-            action.direction.x -= difX * acceleration / (dist * dist);
-            action.direction.y -= difY * acceleration / (dist * dist);
-        }
-    }
-    console.log(target);
-    // rock rock collision
-    for (var i = 0; i < this.game.rocks.length; i++) {
-        var ent = this.game.rocks[i];
-        if (!ent.removeFromWorld && !ent.thrown && this.rocks < 2 && this.collide({ x: ent.x, y: ent.y, radius: this.visualRadius })) {
-            var dist = distance(this, ent);
-            if (dist > this.radius + ent.radius) {
-                var difX = (ent.x - this.x) / dist;
-                var difY = (ent.y - this.y) / dist;
-                action.direction.x += difX * acceleration / (dist * dist);
-                action.direction.y += difY * acceleration / (dist * dist);
-            }
-        }
-    }
-    // testing corner when collision
-    for (var i = 0; i < this.corners.length;i++) {
-        if (this.collide({x:this.corners[i].x,y:this.corners[i].y, radius: this.visualRadius})) {
-            var dist = distance(this, this.corners[i]);
-            var difX = (this.corners[i].x - this.x) / dist;
-            var difY = (this.corners[i].y - this.y) / dist;
-            action.direction.x -= difX * acceleration / (dist * dist);
-            action.direction.y -= difY * acceleration / (dist * dist);
-
-        }
-    }
-    // testing
-    if (target && !target.removeFromWorld && 0 === this.cooldown && this.rocks > 0) {
-        var zx = target.x;
-        var zvx = target.velocity.x;
-        var zvy = target.velocity.y;
-
-
-        speed = Math.sqrt(target.velocity.x * target.velocity.x + target.velocity.y * target.velocity.y);
-        var ZombieGoal = {x: zvx, y:zvy};
-        var dir = direction(target,ZombieGoal);
-        var willbeX = zx + dir.x;
-        var willbeY = zy + dir.y;
-        var zombieLocation = {x: willbeX, y: willbeY};
-        action.target = target;
-        action.throwRock = true;
-
     }
 
     if (target) {
-
+        action.target = target;
+        action.throwRock = true;
     }
     return action;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // do not change code beyond this point
 
-JX.prototype.collide = function (other) {
+JXAN.prototype.collide = function (other) {
     return distance(this, other) < this.radius + other.radius;
 };
 
-JX.prototype.collideLeft = function () {
+JXAN.prototype.collideLeft = function () {
     return (this.x - this.radius) < 0;
 };
 
-JX.prototype.collideRight = function () {
+JXAN.prototype.collideRight = function () {
     return (this.x + this.radius) > 800;
 };
 
-JX.prototype.collideTop = function () {
+JXAN.prototype.collideTop = function () {
     return (this.y - this.radius) < 0;
 };
 
-JX.prototype.collideBottom = function () {
+JXAN.prototype.collideBottom = function () {
     return (this.y + this.radius) > 800;
 };
 
-JX.prototype.update = function () {
+JXAN.prototype.update = function () {
     Entity.prototype.update.call(this);
     // console.log(this.velocity);
     if (this.cooldown > 0) this.cooldown -= this.game.clockTick;
@@ -252,7 +169,7 @@ JX.prototype.update = function () {
     this.velocity.y -= (1 - friction) * this.game.clockTick * this.velocity.y;
 };
 
-JX.prototype.draw = function (ctx) {
+JXAN.prototype.draw = function (ctx) {
     ctx.beginPath();
     ctx.fillStyle = this.color;
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
