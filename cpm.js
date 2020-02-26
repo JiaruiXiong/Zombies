@@ -12,6 +12,7 @@ function CPM(game) {
     this.name = "Dr. Marriott";
     this.color = "White";
     this.cooldown = 0;
+    this.direction = { x: randomInt(1600) - 800, y: randomInt(1600) - 800 };
     Entity.call(this, game, this.radius + Math.random() * (800 - this.radius * 2), this.radius + Math.random() * (800 - this.radius * 2));
 
     this.velocity = { x: 0, y: 0 };
@@ -35,11 +36,9 @@ CPM.prototype.constructor = CPM;
 
 CPM.prototype.selectAction = function () {
 
-    var action = { direction: { x: 0, y: 0 }, throwRock: false, target: null};
-    var acceleration = 1000000;
+    var action = { direction: { x: this.direction.x, y: this.direction.y }, throwRock: false, target: null };
     var closest = 1000;
     var target = null;
-    this.visualRadius = 500;
 
     for (var i = 0; i < this.game.zombies.length; i++) {
         var ent = this.game.zombies[i];
@@ -47,24 +46,6 @@ CPM.prototype.selectAction = function () {
         if (dist < closest) {
             closest = dist;
             target = ent;
-        }
-        if (this.collide({x: ent.x, y: ent.y, radius: this.visualRadius})) {
-            var difX = (ent.x - this.x) / dist;
-            var difY = (ent.y - this.y) / dist;
-            action.direction.x -= difX * acceleration / (dist * dist);
-            action.direction.y -= difY * acceleration / (dist * dist);
-        }
-    }
-    for (var i = 0; i < this.game.rocks.length; i++) {
-        var ent = this.game.rocks[i];
-        if (!ent.removeFromWorld && !ent.thrown && this.rocks < 2 && this.collide({ x: ent.x, y: ent.y, radius: this.visualRadius })) {
-            var dist = distance(this, ent);
-            if (dist > this.radius + ent.radius) {
-                var difX = (ent.x - this.x) / dist;
-                var difY = (ent.y - this.y) / dist;
-                action.direction.x += difX * acceleration / (dist * dist);
-                action.direction.y += difY * acceleration / (dist * dist);
-            }
         }
     }
 

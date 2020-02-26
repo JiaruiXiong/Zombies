@@ -33,7 +33,9 @@ function GameEngine() {
     this.zombies = [];
     this.players = [];
     this.rocks = [];
+    this.elapsedTime = 0;
     this.zombieCooldown = 1;
+    this.zombieCooldownMax = 1;
     this.showOutlines = false;
     this.ctx = null;
     this.click = null;
@@ -41,6 +43,8 @@ function GameEngine() {
     this.wheel = null;
     this.surfaceWidth = null;
     this.surfaceHeight = null;
+    this.timer = null;
+    this.clockTick = 0;
 }
 
 GameEngine.prototype.init = function (ctx) {
@@ -102,9 +106,19 @@ GameEngine.prototype.addEntity = function (entity) {
     //console.log('added entity');
     this.entities.push(entity);
     if (entity.name === "Zombie") this.zombies.push(entity);
-    if (entity.name === "Rock") this.rocks.push(entity);
+    else if (entity.name === "Rock") this.rocks.push(entity);
     else this.players.push(entity);
 }
+
+GameEngine.prototype.reset = function () {
+    this.entities = [];
+    this.zombies = [];
+    this.players = [];
+    this.rocks = [];
+    this.elapsedTime = 0;
+    this.zombieCooldownMax = 1;
+}
+
 
 GameEngine.prototype.draw = function () {
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -118,9 +132,11 @@ GameEngine.prototype.draw = function () {
 GameEngine.prototype.update = function () {
     var entitiesCount = this.entities.length;
 
+    this.elapsedTime += this.clockTick;
     this.zombieCooldown -= this.clockTick;
     if (this.zombieCooldown < 0) {
-        this.zombieCooldown = 1;
+        this.zombieCooldown = this.zombieCooldownMax;
+        this.zombieCooldownMax = this.zombieCooldownMax * 0.995;
         var zom = new Zombie(this);
         this.addEntity(zom);
     }
@@ -146,6 +162,8 @@ GameEngine.prototype.update = function () {
     for (var i = this.players.length - 1; i >= 0; --i) {
         if (this.players[i].removeFromWorld) {
             this.players.splice(i, 1);
+        } else {
+            this.players[i].time += this.clockTick;
         }
     }
     for (var i = this.rocks.length - 1; i >= 0; --i) {
