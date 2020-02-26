@@ -89,6 +89,7 @@ JX.prototype.selectAction = function () {
     // testing
     if (target && !target.removeFromWorld && 0 === this.cooldown && this.rocks > 0) {
         var zx = target.x;
+        var zy = target.y;
         var zvx = target.velocity.x;
         var zvy = target.velocity.y;
 
@@ -105,7 +106,8 @@ JX.prototype.selectAction = function () {
     }
 
     if (target) {
-
+        action.target = target;
+        action.throwRock = true;
     }
     return action;
 };
