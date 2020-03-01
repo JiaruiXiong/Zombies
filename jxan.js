@@ -9,7 +9,7 @@ function JXAN(game) {
     this.radius = 10;           // the radius of the players
     this.rocks = 0;             // the number of initial rocks dont change it 
     this.kills = 0;             // initialize the kills     
-    this.name = "Jiarui Xiong"; // chosen Name
+    this.name = "Ai Nguyen && Jiarui Xiong"; // chosen Name
     this.color = "Blue";       // the color of the players // 需要在agent controller 中改名字 Using a name in agent controller
     this.cooldown = 0;          // cooldown time
 
