@@ -352,7 +352,7 @@ ASSET_MANAGER.downloadAll(function () {
     var royalRumble = 3;
 
     var numZombies = 1;
-    var numPlayers = 1;
+    var numPlayers = 6;
     var numRocks = 12;
 
     var games = 0;

@@ -44,9 +44,9 @@ JXAN.prototype.selectAction = function () {
 
     var action = { direction: { x: 0, y: 0 }, throwRock: false, target: null};
     var acceleration = 1000000;
-    var closest = 1000;
+    var closest = 500;
     var target = null;
-    this.visualRadius = 500;
+    this.visualRadius = 1000;
     // 僵尸 Zombies
     for (var i = 0; i < this.game.zombies.length; i++) {
         var ent = this.game.zombies[i];
