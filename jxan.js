@@ -87,7 +87,7 @@ JXAN.prototype.selectAction = function () {
         }
     }
     // testing
-    if (target && !target.removeFromWorld && 0 === this.cooldown && this.rocks > 0) {
+    if (target && !target.removeFromWorld && this.cooldown === 0 && this.rocks > 0) {
         var zx = target.x;
         var zy = target.y;
         var zvx = target.velocity.x;
