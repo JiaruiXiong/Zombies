@@ -47,19 +47,29 @@ JXAN.prototype.selectAction = function () {
     var closest = 500;
     var target = null;
     this.visualRadius = 1000;
+    var dangerousZombie = Infinity;
     // 僵尸 Zombies
     for (var i = 0; i < this.game.zombies.length; i++) {
         var ent = this.game.zombies[i];
+        var currentSpeed = Math.sqrt(ent.x * ent.x + ent.y * ent.y);
         var dist = distance(ent, this);
-        if (dist < closest) {
-            closest = dist;
-            target = ent;
+        console.log(dist/currentSpeed)
+        if (dist/currentSpeed < dangerousZombie) {
+            dangerousZombie = dist/currentSpeed;
+            target = ent;           
         }
+        // if (dist < closest) {
+        //     closest = dist;
+        //     target = ent;
+        // }
         if (this.collide({x: ent.x, y: ent.y, radius: this.visualRadius})) {
             var difX = (ent.x - this.x) / dist;
             var difY = (ent.y - this.y) / dist;
             action.direction.x -= difX * acceleration / (dist * dist);
             action.direction.y -= difY * acceleration / (dist * dist);
+        }
+        if (){
+            
         }
     }
     // rock rock collision
