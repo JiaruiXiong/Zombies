@@ -48,7 +48,11 @@ JXAN.prototype.selectAction = function () {
     var target = null;
     this.visualRadius = 1000;
     var dangerousZombie = Infinity;
-    // 僵尸 Zombies
+
+    // var directions = 
+
+
+    //Zombies
     for (var i = 0; i < this.game.zombies.length; i++) {
         var ent = this.game.zombies[i];
         var currentSpeed = Math.sqrt(ent.x * ent.x + ent.y * ent.y);
@@ -67,9 +71,6 @@ JXAN.prototype.selectAction = function () {
             var difY = (ent.y - this.y) / dist;
             action.direction.x -= difX * acceleration / (dist * dist);
             action.direction.y -= difY * acceleration / (dist * dist);
-        }
-        if (){
-            
         }
     }
     // rock rock collision
@@ -109,9 +110,9 @@ JXAN.prototype.selectAction = function () {
         var dir = direction(target,ZombieGoal);
         var willbeX = zx + dir.x;
         var willbeY = zy + dir.y;
-        var zombieLocation = {x: willbeX, y: willbeY};
-        action.target = target;
-        action.throwRock = true;
+        // var zombieLocation = {x: willbeX, y: willbeY};
+        // action.target = target;
+        // action.throwRock = true;
 
     }
 
