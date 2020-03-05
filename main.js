@@ -638,8 +638,11 @@ ASSET_MANAGER.downloadAll(function () {
     var gameEngine = new GameEngine();
 
     agents.push(new JXAN(gameEngine));
+    agents.push(new JXAN(gameEngine));
+    agents.push(new JXAN(gameEngine));
     agentClasses.push(JXAN);
-
+    agentClasses.push(JXAN);
+    agentClasses.push(JXAN);
     for (var i = 0; i < agents.length; i++) {
         circle = agents[i];
         players[i].children[0].innerHTML = circle.name;

@@ -15,7 +15,7 @@ function JXAN(game) {
 
     this.corners = [{x:0,y:0},{x:800,y:0},{x:0,y:800},{x:800,y:800}]; //测试用的加的  Using for testing 
 
-    // 判定是否是角落。player可以往回走 // checking if corner or not, the player will not stuck on corners
+    // checking if corner or not, the player will not stuck on corners
     Entity.call(this, game, this.radius + Math.random() * (800 - this.radius * 2), this.radius + Math.random() * (800 - this.radius * 2));
 
     this.velocity = { x: 0, y: 0 }; // the velocity of x-axis and y-axis   Please dont change it 
@@ -44,9 +44,9 @@ JXAN.prototype.selectAction = function () {
 
     var action = { direction: { x: 0, y: 0 }, throwRock: false, target: null};
     var acceleration = 1000000;
-    var closest = 500;
+    var closest = 250;
     var target = null;
-    this.visualRadius = 1000;
+    this.visualRadius = 500;
     var dangerousZombie = Infinity;
 
     // var directions = 
@@ -58,15 +58,15 @@ JXAN.prototype.selectAction = function () {
         var currentSpeed = Math.sqrt(ent.x * ent.x + ent.y * ent.y);
         var dist = distance(ent, this);
         console.log(dist/currentSpeed)
-        if (dist/currentSpeed < dangerousZombie) {
-            dangerousZombie = dist/currentSpeed;
-            target = ent;           
-        }
-        // if (dist < closest) {
-        //     closest = dist;
-        //     target = ent;
+        // if (dist/currentSpeed < dangerousZombie) {
+        //     dangerousZombie = dist/currentSpeed;
+        //     target = ent;           
         // }
-        if (this.collide({x: ent.x, y: ent.y, radius: this.visualRadius})) {
+        if (dist < closest) {
+            closest = dist;
+            target = ent;
+        }
+        if (this.collide({x: ent.x, y: ent.y, radius: 100})) {
             var difX = (ent.x - this.x) / dist;
             var difY = (ent.y - this.y) / dist;
             action.direction.x -= difX * acceleration / (dist * dist);
@@ -88,11 +88,11 @@ JXAN.prototype.selectAction = function () {
     }
     // testing corner when collision
     for (var i = 0; i < this.corners.length;i++) {
-        if (this.collide({x:this.corners[i].x,y:this.corners[i].y, radius: this.visualRadius})) {
+        if (this.collide({x:this.corners[i].x,y:this.corners[i].y, radius: 50})) {
             var dist = distance(this, this.corners[i]);
             var difX = (this.corners[i].x - this.x) / dist;
             var difY = (this.corners[i].y - this.y) / dist;
-            action.direction.x -= difX * acceleration / (dist * dist);
+            action.direction.x -= difX * acceleration / (dist * dist); 
             action.direction.y -= difY * acceleration / (dist * dist);
 
         }
