@@ -108,7 +108,7 @@ JXAN.prototype.selectAction = function () {
         var zvy = target.velocity.y;
 
 
-        var speed = Math.sqrt(target.velocity.x * target.velocity.x + target.velocity.y * target.velocity.y);
+        // var speed = Math.sqrt(target.velocity.x * target.velocity.x + target.velocity.y * target.velocity.y);
         var ZombieGoal = {x: zvx, y:zvy};
         var dir = direction(target,ZombieGoal);
         var willbeX = zx + dir.x;
