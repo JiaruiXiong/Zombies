@@ -640,6 +640,16 @@ ASSET_MANAGER.downloadAll(function () {
     agents.push(new JXAN(gameEngine));
     agents.push(new JXAN(gameEngine));
     agents.push(new JXAN(gameEngine));
+    agents.push(new JXAN(gameEngine));
+    agents.push(new JXAN(gameEngine));
+    agents.push(new JXAN(gameEngine));
+    agents.push(new JXAN(gameEngine));
+    agents.push(new JXAN(gameEngine));
+    agentClasses.push(JXAN);
+    agentClasses.push(JXAN);
+    agentClasses.push(JXAN);
+    agentClasses.push(JXAN);
+    agentClasses.push(JXAN);
     agentClasses.push(JXAN);
     agentClasses.push(JXAN);
     agentClasses.push(JXAN);
