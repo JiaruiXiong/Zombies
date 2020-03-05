@@ -47,7 +47,7 @@ JXAN.prototype.selectAction = function () {
     var closest = 250;
     var target = null;
     this.visualRadius = 500;
-    var dangerousZombie = Infinity;
+    // var dangerousZombie = Infinity;
 
     // var directions = [{x:0, y:1},{x:1, y:0},{x:0, y:-1},{x:-1, y:0},
     //                     {x:1, y:1},{x:1, y:-1},{x:-1, y:-1},{x:-1, y:1},];
@@ -95,8 +95,8 @@ JXAN.prototype.selectAction = function () {
             var dist = distance(this, this.corners[i]);
             var difX = (this.corners[i].x - this.x) / dist;
             var difY = (this.corners[i].y - this.y) / dist;
-            // action.direction.x -= difX * acceleration / (dist * dist); 
-            // action.direction.y -= difY * acceleration / (dist * dist);
+            action.direction.x -= difX * acceleration / (dist * dist); 
+            action.direction.y -= difY * acceleration / (dist * dist);
 
         }
     }
