@@ -4,16 +4,18 @@
 
 // only change code in selectAction function()
 
-
 function JXAN(game) {
-    this.player = 1;
-    this.radius = 10;
-    this.rocks = 0;
-    this.kills = 0;
-    this.name = "Dr. Marriott";
-    this.color = "White";
-    this.cooldown = 0;
-    this.direction = { x: randomInt(1600) - 800, y: randomInt(1600) - 800 };
+    this.player = 1;            // Number of player 
+    this.radius = 10;           // the radius of the players
+    this.rocks = 0;             // the number of initial rocks dont change it 
+    this.kills = 0;             // initialize the kills     
+    this.name = "Ai Nguyen && Jiarui Xiong"; // chosen Name
+    this.color = "Blue";       // the color of the players // 需要在agent controller 中改名字 Using a name in agent controller
+    this.cooldown = 0;          // cooldown time
+
+    this.corners = [{x:0,y:0},{x:800,y:0},{x:0,y:800},{x:800,y:800}]; //测试用的加的  Using for testing 
+
+    // checking if corner or not, the player will not stuck on corners
     Entity.call(this, game, this.radius + Math.random() * (800 - this.radius * 2), this.radius + Math.random() * (800 - this.radius * 2));
 
     this.velocity = { x: 0, y: 0 };
@@ -37,25 +39,86 @@ JXAN.prototype.constructor = JXAN;
 
 JXAN.prototype.selectAction = function () {
 
-    var action = { direction: { x: this.direction.x, y: this.direction.y }, throwRock: false, target: null };
-    var closest = 10;
+    var action = { direction: { x: 0, y: 0 }, throwRock: false, target: null};
+    var acceleration = 1000000;
+    var closest = 250;
     var target = null;
+    this.visualRadius = 500;
+    // var dangerousZombie = Infinity;
+
+    // var directions = [{x:0, y:1},{x:1, y:0},{x:0, y:-1},{x:-1, y:0},
+    //                     {x:1, y:1},{x:1, y:-1},{x:-1, y:-1},{x:-1, y:1},];
+
+    // var directions = 
 
 
-    // Dodge zombies aaaaaaaaaaaaaaa................................ 
+    //Zombies
     for (var i = 0; i < this.game.zombies.length; i++) {
         var ent = this.game.zombies[i];
+        var currentSpeed = Math.sqrt(ent.x * ent.x + ent.y * ent.y);
         var dist = distance(ent, this);
+        console.log(dist/currentSpeed)
+        // if (dist/currentSpeed < dangerousZombie) {
+        //     dangerousZombie = dist/currentSpeed;
+        //     target = ent;           
+        // }
         if (dist < closest) {
             closest = dist;
             target = ent;
         }
+        if (this.collide({x: ent.x, y: ent.y, radius: 100})) {
+            var difX = (ent.x - this.x) / dist;
+            var difY = (ent.y - this.y) / dist;
+            action.direction.x -= difX * acceleration / (dist * dist);
+            action.direction.y -= difY * acceleration / (dist * dist);
+        }
+    }
+    // rock rock collision
+    for (var i = 0; i < this.game.rocks.length; i++) {
+        var ent = this.game.rocks[i];
+        if (!ent.removeFromWorld && !ent.thrown && this.rocks < 2 && this.collide({ x: ent.x, y: ent.y, radius: 500 })) {
+            var dist = distance(this, ent);
+            if (dist > this.radius + ent.radius) {
+                var difX = (ent.x - this.x) / dist;
+                var difY = (ent.y - this.y) / dist;
+                action.direction.x += difX * acceleration / (dist * dist);
+                action.direction.y += difY * acceleration / (dist * dist);
+            }
+        }
+    }
+    // testing corner when collision
+    for (var i = 0; i < this.corners.length;i++) {
+        if (this.collide({x:this.corners[i].x,y:this.corners[i].y, radius: 50})) {
+            var dist = distance(this, this.corners[i]);
+            var difX = (this.corners[i].x - this.x) / dist;
+            var difY = (this.corners[i].y - this.y) / dist;
+            action.direction.x -= difX * acceleration / (dist * dist); 
+            action.direction.y -= difY * acceleration / (dist * dist);
+
+        }
+    }
+    // testing
+    if (target && !target.removeFromWorld && this.cooldown === 0 && this.rocks > 0) {
+        var zx = target.x;
+        var zy = target.y;
+        var zvx = target.velocity.x;
+        var zvy = target.velocity.y;
+
+
+        var ZombieGoal = {x: zvx, y:zvy};
+        var dir = direction(target,ZombieGoal);
+        var willbeX = zx + dir.x;
+        var willbeY = zy + dir.y;
+        var zombieLocation = {x: willbeX, y: willbeY};
+        action.target = zombieLocation;
+        action.throwRock = true;
+
     }
 
-    if (target) {
-        action.target = target;
-        action.throwRock = true;
-    }
+    // if (target) {
+    //     action.target = target;
+    //     action.throwRock = true;
+    // }
     return action;
 };
 
@@ -176,3 +239,4 @@ JXAN.prototype.draw = function (ctx) {
     ctx.fill();
     ctx.closePath();
 };
+
